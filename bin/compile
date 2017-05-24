@@ -30,7 +30,7 @@ mkdir -p "$bin"
 export PATH="$bin:$PATH"
 
 if [ ! "$(which stack)" ]; then
-    version=0.1.6.0
+    version=1.4.0
     slug="stack-$version-linux-x86_64"
     url="https://github.com/commercialhaskell/stack/releases/download/v$version/$slug.tar.gz"
     if [ ! -x "$cache/$slug/stack" ]; then
@@ -58,9 +58,5 @@ cd "$build"
 echo '-----> Setting up stack'
 stack setup |& indent
 
-echo '-----> Installing app'
-mkdir -p "$cache/.stack-work"
-ln -s "$cache/.stack-work" "$build"
-stack build |& indent
-cp $(stack path --local-install-root)/bin/* "$bin"
-rm "$build/.stack-work"
+export PATH="$HOME/.local/bin:$PATH"
+stack --resolver nightly install rattletrap
